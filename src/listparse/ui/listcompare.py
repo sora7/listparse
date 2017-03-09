@@ -3,6 +3,7 @@ import tkinter.ttk
 
 FRAME_BORDER = 0
 
+
 class ListCompareView:
     # main window
     root = None
@@ -22,7 +23,7 @@ class ListCompareView:
         self.createWidgets(root, main_frame)
 
     def createWidgets(self, root, main_frame):
-        if root == None:
+        if root is None:
             # standalone
             self.root = tkinter.Tk()
             self.root.title('List Compare')
@@ -56,6 +57,9 @@ class ListCompareView:
             # inside
             main_frame = main
 
+        self.mk_widgets(main_frame)
+
+    def mk_widgets(self, main_frame):
         self.mk_result_frame(main_frame)
         self.mk_additional_frame(main_frame)
 

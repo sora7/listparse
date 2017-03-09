@@ -59,5 +59,6 @@ target/
 # PyCharm
 .idea/*
 
-LISTS/*
+#lists
+#LISTS/*
 TEST/*

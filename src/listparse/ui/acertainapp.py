@@ -3,6 +3,7 @@ import tkinter.ttk
 
 import listparse.ui.listcompare as lc
 
+
 class ACertainView:
     root = None
 
@@ -12,7 +13,8 @@ class ACertainView:
     def __init__(self):
         self.create_ui()
         self.listCompare = lc.ListCompareView(root=self.root,
-                                           main_frame=self.tabs['list_compare'])
+                                              main_frame=
+                                              self.tabs['list_compare'])
 
     def create_ui(self):
         self.root = tkinter.Tk()
