@@ -1,12 +1,15 @@
 import tkinter
 import tkinter.ttk
 
-FRAME_BORDER = 0
+
+from listparse.ui.common import mk_listbox
+
+FRAME_BORDER = 5
 
 
 class ListCompareView:
     # main window
-    root = None
+    __root = None
 
     listboxes = {}
     buttons = {}
@@ -16,24 +19,35 @@ class ListCompareView:
     modes = {}
 
     def close(self):
-        self.root.destroy()
-        self.root.quit()
+        self.__root.destroy()
+        self.__root.quit()
 
     def __init__(self, root=None, main_frame=None):
-        self.createWidgets(root, main_frame)
-
-    def createWidgets(self, root, main_frame):
         if root is None:
             # standalone
-            self.root = tkinter.Tk()
-            self.root.title('List Compare')
+            self.__root = tkinter.Tk()
+            self.__root.title('List Compare')
             w = 600
             h = 500
-            self.root.geometry('%sx%s+0+0' % (w, h))
+            self.__root.geometry('%sx%s+0+0' % (w, h))
         else:
             # inside
-            self.root = root
+            self.__root = root
 
+        self.mk_main_frame(main_frame)
+
+    def mk_main_frame(self, main):
+        if main is None:
+            # standalone
+            main_frame = tkinter.Frame(master=self.__root, bg='black', bd=FRAME_BORDER)
+            main_frame.pack(fill='both', expand=True)
+        else:
+            # inside
+            main_frame = main
+
+        self.mk_widgets(main_frame)
+
+    def mk_widgets(self, main_frame):
         self.modes['result_sort'] = tkinter.StringVar()
         self.modes['result_sort'].set('year')
 
@@ -46,20 +60,6 @@ class ListCompareView:
         self.textlabels['awailable_stat'] = tkinter.StringVar()
         self.textlabels['awailable_stat'].set('0 lists awailable')
 
-        self.mk_main_frame(main_frame)
-
-    def mk_main_frame(self, main):
-        if main == None:
-            # standalone
-            main_frame = tkinter.Frame(master=self.root, bg='black', bd=FRAME_BORDER)
-            main_frame.pack(fill='both', expand=True)
-        else:
-            # inside
-            main_frame = main
-
-        self.mk_widgets(main_frame)
-
-    def mk_widgets(self, main_frame):
         self.mk_result_frame(main_frame)
         self.mk_additional_frame(main_frame)
 
@@ -72,15 +72,17 @@ class ListCompareView:
                                                                  side='top')
         self.mk_statistic_frame(result_frame)
 
-        self.listboxes['result'] = tkinter.Listbox(result_frame,
-                                                   selectmode=tkinter.EXTENDED)
-        result_listbox = self.listboxes['result']
-        result_listbox.pack(side='left', fill='both', expand=True)
+        self.listboxes['result'] = mk_listbox(result_frame)
 
-        res_scrollBar = tkinter.ttk.Scrollbar(result_frame)
-        res_scrollBar.pack(side='right', fill='y', expand=False)
-        res_scrollBar['command'] = result_listbox.yview
-        result_listbox['yscrollcommand'] = res_scrollBar.set
+        # self.listboxes['result'] = tkinter.Listbox(result_frame,
+        #                                            selectmode=tkinter.EXTENDED)
+        # result_listbox = self.listboxes['result']
+        # result_listbox.pack(side='left', fill='both', expand=True)
+        #
+        # res_scrollBar = tkinter.ttk.Scrollbar(result_frame)
+        # res_scrollBar.pack(side='right', fill='y', expand=False)
+        # res_scrollBar['command'] = result_listbox.yview
+        # result_listbox['yscrollcommand'] = res_scrollBar.set
 
     def mk_statistic_frame(self, result_frame):
         statistic_frame = tkinter.Frame(result_frame, bg='blue',
@@ -99,11 +101,12 @@ class ListCompareView:
 
         radio_opt = {'side': 'left', 'fill': 'none'}
         for title, value_ in RADIO:
-            self.radiobuttons[title] = tkinter.Radiobutton(statistic_frame,
-                                text=title,
-                                variable=res_sort_mode,
-                                value=value_,
-                                anchor='w')
+            self.radiobuttons[title] = \
+                tkinter.Radiobutton(statistic_frame,
+                                    text=title,
+                                    variable=res_sort_mode,
+                                    value=value_,
+                                    anchor='w')
             self.radiobuttons[title].pack(**radio_opt)
 
         exp_label = tkinter.ttk.Label(statistic_frame, text='EXPAND')
@@ -134,15 +137,17 @@ class ListCompareView:
         selectedLabel = tkinter.ttk.Label(selected_frame, text='selected lists')
         selectedLabel.pack(fill='both')
 
-        self.listboxes['selected'] = tkinter.Listbox(selected_frame,
-                                           selectmode=tkinter.EXTENDED)
-        sel_listbox = self.listboxes['selected']
-        sel_listbox.pack(side='left', fill='both', expand=True)
+        self.listboxes['selected'] = mk_listbox(selected_frame, side='left')
 
-        sel_scrollBar = tkinter.ttk.Scrollbar(selected_frame)
-        sel_scrollBar.pack(side='left', fill='y', expand=False)
-        sel_scrollBar['command'] = sel_listbox.yview
-        sel_listbox['yscrollcommand'] = sel_scrollBar.set
+        # self.listboxes['selected'] = tkinter.Listbox(selected_frame,
+        #                                    selectmode=tkinter.EXTENDED)
+        # sel_listbox = self.listboxes['selected']
+        # sel_listbox.pack(side='left', fill='both', expand=True)
+        #
+        # sel_scrollBar = tkinter.ttk.Scrollbar(selected_frame)
+        # sel_scrollBar.pack(side='left', fill='y', expand=False)
+        # sel_scrollBar['command'] = sel_listbox.yview
+        # sel_listbox['yscrollcommand'] = sel_scrollBar.set
 
 # #        style = ttk.Style()
 # #        style.map('C.TButton',
@@ -176,9 +181,12 @@ class ListCompareView:
 
         radio_opt = {'side': 'top', 'fill': 'x'}
         for title, value_ in RADIO:
-            tkinter.Radiobutton(selected_frame, text=title,
-                                variable=compare_mode, value=value_,
-                                anchor='w').pack(**radio_opt)
+            tkinter.ttk.Radiobutton(selected_frame, text=title,
+                                variable=compare_mode, value=value_
+                                ).pack(**radio_opt)
+            # tkinter.Radiobutton(selected_frame, text=title,
+            #                     variable=compare_mode, value=value_,
+            #                     anchor='w').pack(**radio_opt)
 
     def mk_awailable_frame(self, additinal_frame):
         awailable_frame = tkinter.Frame(additinal_frame,
@@ -195,16 +203,17 @@ class ListCompareView:
                             textvariable=self.textlabels['awailable_stat'])
         stat_label.pack(side='bottom', fill='both')
 
-        self.listboxes['awailable'] = tkinter.Listbox(awailable_frame,
-                                                      selectmode=
-                                                      tkinter.EXTENDED)
-
-        aw_listbox = self.listboxes['awailable']
-        aw_listbox.pack(side='left', fill='both', expand=True)
-        aw_scrollBar = tkinter.ttk.Scrollbar(awailable_frame)
-        aw_scrollBar.pack(side='right', fill='y', expand=False)
-        aw_scrollBar['command'] = aw_listbox.yview
-        aw_listbox['yscrollcommand'] = aw_scrollBar.set
+        self.listboxes['awailable'] = mk_listbox(awailable_frame)
+        # self.listboxes['awailable'] = tkinter.Listbox(awailable_frame,
+        #                                               selectmode=
+        #                                               tkinter.EXTENDED)
+        #
+        # aw_listbox = self.listboxes['awailable']
+        # aw_listbox.pack(side='left', fill='both', expand=True)
+        # aw_scrollBar = tkinter.ttk.Scrollbar(awailable_frame)
+        # aw_scrollBar.pack(side='right', fill='y', expand=False)
+        # aw_scrollBar['command'] = aw_listbox.yview
+        # aw_listbox['yscrollcommand'] = aw_scrollBar.set
 
     def mk_aw_buttons_frame(self, awailable_frame):
         aw_buttons_frame = tkinter.Frame(awailable_frame,
@@ -409,23 +418,24 @@ class ListCompareModel:
         self.sortResult()
         self.displayResult()
 
+
 class ListCompareController:
     model = None
     view = None
 
     def __init__(self, view=None, model=None):
-        if view == None:
+        if view is None:
             self.view = ListCompareView()
         else:
             self.view = view
-        if model == None:
+        if model is None:
             self.model = ListCompareModel(self.view)
         else:
             self.model = model
 
         self.bind_handlers()
 
-        if view == None:
+        if view is None:
             self.view.root.protocol('WM_DELETE_WINDOW', self.close_handler)
             self.view.root.mainloop()
 
