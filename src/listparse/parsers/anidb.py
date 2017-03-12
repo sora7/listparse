@@ -16,7 +16,7 @@ class Person(HTMLParser.HTMLParser):
     ANI_LINK = 'http://anidb.net/perl-bin/animedb.pl\?show=anime&aid='
     ANI_LINK_PATTERN = re.compile(ANI_LINK + '(\d+)')
 
-    titles = []
+    __titles = None
 
     charid_zero = False
 
@@ -49,7 +49,7 @@ class Person(HTMLParser.HTMLParser):
         return False
 
     def __init__(self):
-        self.titles = []
+        self.__titles = []
         HTMLParser.HTMLParser.__init__(self)
 
     def feed(self, data):
@@ -175,10 +175,10 @@ class Person(HTMLParser.HTMLParser):
                     title.type = self.__type
                     title.eps = self.__eps
                     pass_year(title, self.__year)
-                    self.titles.append(title)
+                    self.__titles.append(title)
     @property
     def titles(self):
-        return self.titles
+        return self.__titles
 
 
 class Company(HTMLParser.HTMLParser):

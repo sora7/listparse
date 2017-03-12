@@ -12,16 +12,16 @@ class ACertainView:
     __root = None
 
     tabs = {}
-    listCompare = None
-    tenshiOst = None
+    list_compare = None
+    tenshi_ost = None
 
     def __init__(self):
         self.create_ui()
-        self.listCompare = lc_v.ListCompareView(root=self.__root,
-                                              main_frame=
-                                              self.tabs['list_compare'])
-        self.tenshiOst = to.TenshiOstView(root=self.__root,
-                                          main_frame=self.tabs['tenshi_ost'])
+        self.list_compare = lc_v.ListCompareView(root=self.__root,
+                                                 main_frame=
+                                                 self.tabs['list_compare'])
+        self.tenshi_ost = to.TenshiOstView(root=self.__root,
+                                           main_frame=self.tabs['tenshi_ost'])
 
     @property
     def root(self):
@@ -61,32 +61,32 @@ class ACertainView:
 class ACertainModel:
     view = None
 
-    listCompare = None
-    tenshiOst = None
+    list_compare = None
+    tenshi_ost = None
     ##
 
     def __init__(self, view):
         self.view = view
-        self.listCompare = lc_m.ListCompareModel(view.listCompare)
-        self.tenshiOst = to.TenshiOstModel(view.tenshiOst)
+        self.list_compare = lc_m.ListCompareModel(view.list_compare)
+        self.tenshi_ost = to.TenshiOstModel(view.tenshi_ost)
 
 
 class ACertainController:
     view = None
     model = None
 
-    listCompare = None
-    tenshiOst = None
+    list_compare = None
+    tenshi_ost = None
 
     def __init__(self):
         self.view = ACertainView()
         self.model = ACertainModel(self.view)
 
-        self.listCompare = lc_c.ListCompareController(self.view.listCompare,
-                                                    self.model.listCompare)
+        self.list_compare = lc_c.ListCompareController(self.view.list_compare,
+                                                       self.model.list_compare)
 
-        self.listCompare = to.TenshiOstController(self.view.tenshiOst,
-                                                  self.model.tenshiOst)
+        self.tenshi_ost = to.TenshiOstController(self.view.tenshi_ost,
+                                                 self.model.tenshi_ost)
 
         self.view.root.protocol('WM_DELETE_WINDOW', self.close_handler)
         self.view.root.mainloop()

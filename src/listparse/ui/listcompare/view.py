@@ -2,7 +2,7 @@ import tkinter
 import tkinter.ttk
 
 from listparse.ui.common import mk_listbox, PageView
-
+from listparse.compare import compare_mode
 
 class ListCompareView(PageView):
 
@@ -28,8 +28,11 @@ class ListCompareView(PageView):
         self.modes['result_sort'] = tkinter.StringVar()
         self.modes['result_sort'].set('year')
 
-        self.modes['list_compare'] = tkinter.StringVar()
-        self.modes['list_compare'].set('intersect')
+        # self.modes['list_compare'] = tkinter.StringVar()
+        # self.modes['list_compare'].set('intersect')
+
+        self.modes['list_compare'] = tkinter.IntVar()
+        self.modes['list_compare'].set(compare_mode.INTERSECT)
 
         self.textlabels['result_stat'] = tkinter.StringVar()
         self.textlabels['result_stat'].set('count: 0')
@@ -94,7 +97,7 @@ class ListCompareView(PageView):
         additinal_frame.pack(side='right', fill='both', expand=False)
 
         self.mk_selected_frame(additinal_frame)
-        self.mk_awailable_frame(additinal_frame)
+        self.mk_available_frame(additinal_frame)
 
     def mk_selected_frame(self, additional_frame):
         selected_frame = tkinter.Frame(additional_frame,
@@ -102,8 +105,9 @@ class ListCompareView(PageView):
                                        bd=self.bd)
         selected_frame.pack(side='top', fill='both', expand=True)
 
-        selectedLabel = tkinter.ttk.Label(selected_frame, text='selected lists')
-        selectedLabel.pack(fill='both')
+        selected_label = tkinter.ttk.Label(selected_frame,
+                                           text='selected lists')
+        selected_label.pack(fill='both')
 
         self.listboxes['selected'] = mk_listbox(selected_frame, side='left')
 
@@ -113,7 +117,7 @@ class ListCompareView(PageView):
 # #                  background=[('pressed','!disabled','black'),('active','white')]
 # #            )
         BUTTONS = (
-            ('UP', 'up'),
+            ('UP',   'up'),
             ('DOWN', 'down'),
             ('LIST', 'list'),
             )
@@ -123,50 +127,51 @@ class ListCompareView(PageView):
         for title, name in BUTTONS:
             exp -= 1
             self.buttons[name] = tkinter.ttk.Button(selected_frame, text=title)
-            self.buttons[name].pack(side='top', fill='both',
+            self.buttons[name].pack(side='top',
+                                    fill='both',
                                     expand=not bool(exp))
 
         mode_label = tkinter.ttk.Label(selected_frame, text='mode:', anchor='n')
         mode_label.pack(side='top', fill='x')
 
-        compare_mode = self.modes['list_compare']
+        comp_mode = self.modes['list_compare']
 
         RADIO = (
-            ('intersect', 'intersect'),
-            ('differ',    'differ'),
-            ('union',     'union')
+            ('intersect', compare_mode.INTERSECT),
+            ('differ',    compare_mode.DIFFER),
+            ('union',     compare_mode.UNION)
             )
 
         radio_opt = {'side': 'top', 'fill': 'x'}
         for title, value_ in RADIO:
-            tkinter.ttk.Radiobutton(selected_frame, text=title,
-                                variable=compare_mode, value=value_
-                                ).pack(**radio_opt)
-            # tkinter.Radiobutton(selected_frame, text=title,
-            #                     variable=compare_mode, value=value_,
-            #                     anchor='w').pack(**radio_opt)
+            tkinter.ttk.Radiobutton(selected_frame,
+                                    text=title,
+                                    variable=comp_mode,
+                                    value=value_
+                                    ).pack(**radio_opt)
 
-    def mk_awailable_frame(self, additinal_frame):
-        awailable_frame = tkinter.Frame(additinal_frame,
+    def mk_available_frame(self, additional_frame):
+        available_frame = tkinter.Frame(additional_frame,
                                         bg='red',
                                         bd=self.bd)
-        awailable_frame.pack(side='top', fill='both', expand=True)
+        available_frame.pack(side='top', fill='both', expand=True)
 
-        self.mk_aw_buttons_frame(awailable_frame)
+        self.mk_aw_buttons_frame(available_frame)
 
-        aw_label = tkinter.ttk.Label(awailable_frame, text='awailable lists')
-        aw_label.pack(side='top',fill='both')
+        aw_label = tkinter.ttk.Label(available_frame, text='available lists')
+        aw_label.pack(side='top', fill='both')
 
-        stat_label = tkinter.ttk.Label(awailable_frame,
-                            textvariable=self.textlabels['awailable_stat'])
+        stat_label = tkinter.ttk.Label(available_frame,
+                                       textvariable=
+                                       self.textlabels['awailable_stat'])
         stat_label.pack(side='bottom', fill='both')
 
-        self.listboxes['awailable'] = mk_listbox(awailable_frame)
+        self.listboxes['awailable'] = mk_listbox(available_frame)
 
     def mk_aw_buttons_frame(self, awailable_frame):
         aw_buttons_frame = tkinter.Frame(awailable_frame,
-                                        bg='yellow',
-                                        bd=self.bd)
+                                         bg='yellow',
+                                         bd=self.bd)
         aw_buttons_frame.pack(side='top', fill='x', expand=False)
 
         BUTTONS = (

@@ -49,23 +49,23 @@ class ListCompareController:
 
     def up_handler(self, event):
         print('up handler')
-        self.model.upSelected()
+        self.model.up_selected()
 
     def down_handler(self, event):
         print('down handler')
-        self.model.downSelected()
+        self.model.down_selected()
 
     def list_handler(self, event):
         print('list handler')
-        self.model.listCompare()
+        self.model.list_compare()
 
     def add_handler(self, event):
         print('add handler')
-        self.model.addList()
+        self.model.add_list()
 
     def del_handler(self, event):
         print('del handler')
-        self.model.delList()
+        self.model.del_list()
 
     def reload_handler(self, event):
         print('reload handler')
@@ -73,11 +73,11 @@ class ListCompareController:
 
     def result_sort_handler_name(self, event):
         print('result sort handler name')
-        self.model.resultSortChange('name')
+        self.model.result_sort_change('name')
 
     def result_sort_handler_year(self, event):
         print('result sort handler year')
-        self.model.resultSortChange('year')
+        self.model.result_sort_change('year')
 
     def close_handler(self):
         print('close')
