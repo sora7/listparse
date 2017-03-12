@@ -166,7 +166,7 @@ class ListCompareModel:
 #         curdir = abspath(os.path.curdir)
 #         LISTS_PATH = os.path.normpath(join(curdir, LISTS_DIR))
         #LISTS_PATH = os.path.normpath("/home/alex/prog/workspace/CertainProg/lists/")
-        LISTS_PATH = os.path.normpath("../lists/")
+        LISTS_PATH = os.path.normpath("../../../lists/")
         print LISTS_PATH
         
         awailable = self.lists['awailable']

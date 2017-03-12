@@ -1,59 +1,28 @@
 import tkinter
 import tkinter.ttk
 
-from listparse.ui.common import mk_listbox
-
-FRAME_BORDER = 0
+from listparse.ui.common import mk_listbox, PageView
 
 
-class TenshiOstView(object):
-    __root = None
+class TenshiOstView(PageView):
 
     listboxes = {}
     buttons = {}
 
     textlabels = {}
 
-    bd = None
+    def params(self):
+        param = {
+            'x': 0,
+            'y': 0,
+            'w': 650,
+            'h': 500,
+            'title': 'TenshiOST',
+            'bd': 5,
+        }
+        return param
 
-    @property
-    def root(self):
-        return self.__root
-
-    def close(self):
-        self.__root.destroy()
-        self.__root.quit()
-
-    def __init__(self, root=None, main_frame=None):
-        # self.create_ui(root, main_frame)
-        if root is None:
-            # standalone
-            self.__root = tkinter.Tk()
-            self.__root.title('TenshiOST')
-            x, y, w, h = 0, 0, 650, 500
-            self.__root.geometry('%sx%s+%s+%s' % (w, h, x, y))
-        else:
-            # inside
-            self.__root = root
-
-        self.bd = FRAME_BORDER
-        self.mk_main_frame(main_frame)
-
-    def create_ui(self, root, main_frame):
-        pass
-
-    def mk_main_frame(self, main_frame):
-        if main_frame == None:
-            # standalone
-            main = tkinter.Frame(master=self.__root, bg='black',bd=self.bd)
-            main.pack(fill='both', expand=True)
-        else:
-            # inside
-            main = main_frame
-
-        self.mk_widgets(main)
-
-    def mk_widgets(self, main_frame):
+    def make_widgets(self, main_frame):
         self.mk_up_frame(main_frame)
         self.mk_search_frame(main_frame)
         self.mk_load_frame(main_frame)
@@ -114,7 +83,7 @@ class TenshiOstView(object):
         load_button = tkinter.ttk.Button(load_frame, text='LOAD')
         load_button.pack(side='top', fill='x', expand=True)
 
-        log_listbox = mk_listbox(load_frame, side='bottom', sbars='y')
+        self.listboxes['log'] = mk_listbox(load_frame, side='bottom', sbars='y')
 
 
 class TenshiOstModel(object):

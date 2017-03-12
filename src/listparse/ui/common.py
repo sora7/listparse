@@ -2,35 +2,28 @@ import tkinter
 
 FRAME_BORDER = 5
 
-DEFAULTS = {
-    'x': 0,
-    'y': 0,
-    'w': 500,
-    'h': 500,
-    'title': '% Type Prog Title Here %',
-}
-
 
 class PageView(object):
     __root = None
 
     bd = None
 
-    def __init__(self, root=None, main_frame=None, param=DEFAULTS):
+    def __init__(self, root=None, main_frame=None):
+        param = self.params()
         if root is None:
             # standalone
             self.__root = tkinter.Tk()
             self.__root.title(param['title'])
-            self.__root.geometry('%sx%s+%s+%s' % (param['x'],
-                                                  param['y'],
-                                                  param['w'],
-                                                  param['h']
+            self.__root.geometry('%sx%s+%s+%s' % (param['w'],
+                                                  param['h'],
+                                                  param['x'],
+                                                  param['y']
                                                   ))
         else:
             # inside
             self.__root = root
 
-        self.bd = FRAME_BORDER
+        self.bd = param['bd']
 
         if main_frame is None:
             # standalone
@@ -42,12 +35,28 @@ class PageView(object):
 
         self.make_widgets(main_f)
 
-    def make_widgets(self, main_frame):
-        pass
-
     @property
     def root(self):
         return self.__root
+
+    def close(self):
+        self.__root.destroy()
+        self.__root.quit()
+
+    # Override
+    def make_widgets(self, main_frame):
+        pass
+
+    # Override
+    def params(self):
+        param = {
+            'x': 0,
+            'y': 0,
+            'w': 500,
+            'h': 500,
+            'title': '% Type Prog Title Here %',
+        }
+        return param
 
 
 def mk_scrollable_area(obj, obj_frame, sbars):

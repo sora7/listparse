@@ -1,7 +1,10 @@
 import tkinter
 import tkinter.ttk
 
-import listparse.ui.listcompare as lc
+import listparse.ui.listcompare.view as lc_v
+import listparse.ui.listcompare.model as lc_m
+import listparse.ui.listcompare.controller as lc_c
+
 import listparse.ui.tenshiost as to
 
 
@@ -14,7 +17,7 @@ class ACertainView:
 
     def __init__(self):
         self.create_ui()
-        self.listCompare = lc.ListCompareView(root=self.__root,
+        self.listCompare = lc_v.ListCompareView(root=self.__root,
                                               main_frame=
                                               self.tabs['list_compare'])
         self.tenshiOst = to.TenshiOstView(root=self.__root,
@@ -64,7 +67,7 @@ class ACertainModel:
 
     def __init__(self, view):
         self.view = view
-        self.listCompare = lc.ListCompareModel(view.listCompare)
+        self.listCompare = lc_m.ListCompareModel(view.listCompare)
         self.tenshiOst = to.TenshiOstModel(view.tenshiOst)
 
 
@@ -79,7 +82,7 @@ class ACertainController:
         self.view = ACertainView()
         self.model = ACertainModel(self.view)
 
-        self.listCompare = lc.ListCompareController(self.view.listCompare,
+        self.listCompare = lc_c.ListCompareController(self.view.listCompare,
                                                     self.model.listCompare)
 
         self.listCompare = to.TenshiOstController(self.view.tenshiOst,
