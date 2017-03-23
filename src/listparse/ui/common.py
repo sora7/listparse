@@ -63,15 +63,15 @@ def mk_scrollable_area(obj, obj_frame, sbars):
     obj.grid(row=0, column=0, sticky='NSWE')
 
     if 'y' in sbars:
-        yscrollbar = tkinter.ttk.Scrollbar(obj_frame)
-        yscrollbar.grid(row=0, column=1, sticky='NS')
-        yscrollbar['command'] = obj.yview
-        obj['yscrollcommand'] = yscrollbar.set
+        y_scrollbar = tkinter.ttk.Scrollbar(obj_frame)
+        y_scrollbar.grid(row=0, column=1, sticky='NS')
+        y_scrollbar['command'] = obj.yview
+        obj['yscrollcommand'] = y_scrollbar.set
     if 'x' in sbars:
-        xscrollbar = tkinter.ttk.Scrollbar(obj_frame, orient='horizontal')
-        xscrollbar.grid(row=1, column=0, sticky='WE')
-        xscrollbar['command'] = obj.xview
-        obj['xscrollcommand'] = xscrollbar.set
+        x_scrollbar = tkinter.ttk.Scrollbar(obj_frame, orient='horizontal')
+        x_scrollbar.grid(row=1, column=0, sticky='WE')
+        x_scrollbar['command'] = obj.xview
+        obj['xscrollcommand'] = x_scrollbar.set
 
     obj_frame.columnconfigure(1, 'minsize')
     obj_frame.columnconfigure(0, weight=1)
