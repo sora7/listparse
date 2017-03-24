@@ -19,6 +19,11 @@ class OSTGrabber(object):
 
     __loader = None
 
+    __rx_ost_dir = None
+    __rx_dir = None
+    __rx_item_file = None
+    __rx_item_dir = None
+
     __log_cb = None
     __upd_cb = None
 
@@ -32,6 +37,15 @@ class OSTGrabber(object):
         self.__curr_file = 0
 
         self.__loader = Loader()
+
+        # <img src="/icons/folder.gif" alt="[DIR]"> <a href="Angel_Beats/">Angel_Beats/</a>
+        self.__rx_ost_dir = re.compile(
+                    '<img src=["]/icons/folder[.]gif["] alt=["]\[DIR\]["]> '
+                    '<a href=["](.*)/["]>.*/</a>')
+        # '<a href="Insert_Song_Album.Keep_The_Beats/">'
+        self.__rx_dir = re.compile('<a href=["](.*?)["]>')
+        self.__rx_item_file = re.compile('.*[.][a-z0-9]{3,4}$')
+        self.__rx_item_dir = re.compile('.*/')
 
     def set_log(self, log_function_cb):
         self.__log_cb = log_function_cb
@@ -67,13 +81,8 @@ class OSTGrabber(object):
         ost_list_page = TESHI_DOMAIN + '/anime-ost/'
 
         html_text = self.__loader.get_html(ost_list_page)
-# <img src="/icons/folder.gif" alt="[DIR]"> <a href="Angel_Beats/">Angel_Beats/</a>
-        rx_ost_dir = re.compile(
-            '<img src=["]/icons/folder[.]gif["] alt=["]\[DIR\]["]> '
-            '<a href=["](.*)/["]>.*/</a>'
-        )
 
-        self.__titles = rx_ost_dir.findall(html_text)
+        self.__titles = self.__rx_ost_dir.findall(html_text)
         # print(self.__titles)
 
     def load(self):
@@ -109,26 +118,13 @@ class OSTGrabber(object):
         self.__check_n_make(dir_path)
         html_text = self.__loader.get_html(dir_url)
 
-        # '<a href="Insert_Song_Album.Keep_The_Beats/">'
-        rx_dir = re.compile('<a href=["](.*?)["]>')
-
-        items = rx_dir.findall(html_text)[1:]
-
-        rx_item_file = re.compile('.*[.][a-z0-9]{3,4}$')
-
-        rx_item_dir = re.compile('.*/')
-
-            # if item.endswith('.mp3'):
-            #     self.__add_file(item, dir_url, dir_path)
-            # elif item.endswith('.jpg'):
-            #     self.__add_file(item, dir_url, dir_path)
-            # elif item.endswith('/'):
+        items = self.__rx_dir.findall(html_text)[1:]
 
         for item in items:
-            if bool(rx_item_file.match(item)):
+            if bool(self.__rx_item_file.match(item)):
                 # item is a file
                 self.__add_file(item, dir_url, dir_path)
-            elif bool(rx_item_dir.match(item)):
+            elif bool(self.__rx_item_dir.match(item)):
                 # item is a dir
                 new_dir_url = dir_url + item
                 new_dir_path = os.path.join(dir_path, item[:-1])
