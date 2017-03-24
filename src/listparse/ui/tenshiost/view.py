@@ -55,17 +55,17 @@ class TenshiOstView(PageView):
         search_frame = tkinter.Frame(main_frame, bg='red', bd=self.bd)
         search_frame.pack(side='top', fill='both', expand=True)
 
-        self.mk_awailable_frame(search_frame)
+        self.mk_available_frame(search_frame)
         self.mk_selected_frame(search_frame)
 
-    def mk_awailable_frame(self, search_frame):
-        awailable_frame = tkinter.Frame(search_frame, bg='blue', bd=self.bd)
-        awailable_frame.pack(side='left', fill='both', expand=True)
+    def mk_available_frame(self, search_frame):
+        available_frame = tkinter.Frame(search_frame, bg='blue', bd=self.bd)
+        available_frame.pack(side='left', fill='both', expand=True)
 
-        awailable_label = tkinter.Label(awailable_frame, text='Awailable OSTs')
-        awailable_label.pack(side='top', fill='x', expand=False)
+        available_label = tkinter.Label(available_frame, text='Available OSTs')
+        available_label.pack(side='top', fill='x', expand=False)
 
-        self.listboxes['awailable'] = mk_listbox(awailable_frame,
+        self.listboxes['available'] = mk_listbox(available_frame,
                                                  side='left',
                                                  sbars='y')
 
@@ -98,11 +98,9 @@ class TenshiOstView(PageView):
     @staticmethod
     def display_listbox(listbox, lst):
         listbox.delete(0, tkinter.END)
-        for item in lst:
-            listbox.insert(tkinter.END, '%s' % item.name)
+        for line in lst:
+            listbox.insert(tkinter.END, line)
         listbox.update()
 
-    def display_available(self, lst):
-        self.display_listbox(self.listboxes['awailable'], lst)
-
-
+    def log_add(self, text):
+        self.listboxes['log'].insert(tkinter.END, text)

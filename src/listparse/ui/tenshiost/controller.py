@@ -31,6 +31,9 @@ class TenshiOstController(object):
         self.view.buttons['del'].bind("<Button-1>",     self.del_titles)
         self.view.buttons['load'].bind("<Button-1>",    self.load)
 
+        self.view.listboxes['available'].bind("<Double-1>", self.add_titles)
+        self.view.listboxes['selected'].bind("<Double-1>", self.del_titles)
+
     def reload_titles(self, event):
         self.model.reload()
 

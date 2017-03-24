@@ -1,4 +1,4 @@
-import urllib
+import urllib.request
 
 
 class Loader(object):

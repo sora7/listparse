@@ -2,6 +2,7 @@ import tkinter
 
 from listparse.compare import ListLoader, ListComparator
 
+LISTS_DIR = '../LISTS'
 
 class ListCompareModel:
     view = None
@@ -53,7 +54,7 @@ class ListCompareModel:
 
     def add_list(self):
         print('ADD')
-        listbox = self.view.listboxes['awailable']
+        listbox = self.view.listboxes['available']
         indexes = list(map(int, listbox.curselection()))
         indexes.sort(reverse=True)
 
@@ -70,7 +71,7 @@ class ListCompareModel:
     def del_list(self):
         print('DEL')
         listbox = self.view.listboxes['selected']
-        indexes = map(int, listbox.curselection())
+        indexes = list(map(int, listbox.curselection()))
         indexes.sort(reverse=True)
 
         available = self.list_loader.lists
@@ -84,8 +85,7 @@ class ListCompareModel:
         self.display_selected()
 
     def reload_lists(self):
-        lists_dir = '../lists'
-        self.list_loader.reload_lists(lists_dir, self.display_available)
+        self.list_loader.reload_lists(LISTS_DIR, self.display_available)
         self.sort_available()
         self.display_available()
 
@@ -95,27 +95,18 @@ class ListCompareModel:
         )
 
     def display_available(self):
-        listbox = self.view.listboxes['awailable']
-        textlabel = self.view.textlabels['awailable_stat']
-        available = self.list_loader.lists
-
-        listbox.delete(0, tkinter.END)
-        for item in available:
-            listbox.insert(tkinter.END, '%s' % item.name)
-        listbox.update()
-
-        textlabel.set('%d lists awailable' % len(available))
+        lst = [item.name for item in self.list_loader.lists]
+        self.view.display_listbox(self.view.listboxes['available'],
+                                  lst,
+                                  self.view.textlabels['available_stat']
+                                  )
 
     def display_selected(self):
-        listbox = self.view.listboxes['selected']
-        selected = self.list_comparator.lists
-
-        listbox.delete(0, tkinter.END)
-        for item in selected:
-            listbox.insert(tkinter.END, '%s' % item.name)
-        listbox.update()
-
-        #self.sortResult()
+        lst = [item.name for item in self.list_comparator.lists]
+        self.view.display_listbox(self.view.listboxes['selected'],
+                                  lst,
+                                  self.view.textlabels['selected_stat']
+                                  )
 
     def sort_result(self):
         mode = self.view.modes['result_sort'].get()
@@ -135,16 +126,12 @@ class ListCompareModel:
         result[:] = uniq_dict.values()
 
     def display_result(self):
-        listbox = self.view.listboxes['result']
-        result = self.list_comparator.result
-        textlabel = self.view.textlabels['result_stat']
-
-        listbox.delete(0, tkinter.END)
-        for item in result:
-            listbox.insert(tkinter.END, '%s %s' % (item.year, item.ani_name))
-
-        textlabel.set('count: %i' % len(result))
-        listbox.update()
+        inp_list = self.list_comparator.result
+        res_list = ['%s %s' % (item.year, item.ani_name) for item in inp_list]
+        self.view.display_listbox(self.view.listboxes['result'],
+                                  res_list,
+                                  self.view.textlabels['result_stat']
+                                  )
 
     def result_sort_change(self, type_):
         self.view.modes['result_sort'].set(type_)

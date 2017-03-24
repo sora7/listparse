@@ -47,6 +47,10 @@ class ListCompareController:
         sort_year_radiobutton = self.view.radiobuttons['year']
         sort_year_radiobutton.bind("<Button-1>", self.result_sort_handler_year)
 
+        # double-click on listbox
+        self.view.listboxes['available'].bind("<Double-1>", self.add_handler)
+        self.view.listboxes['selected'].bind("<Double-1>", self.del_handler)
+
     def up_handler(self, event):
         print('up handler')
         self.model.up_selected()

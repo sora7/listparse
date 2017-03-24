@@ -62,3 +62,7 @@ target/
 #lists
 #LISTS/*
 TEST/*
+
+# tenshiost
+src/ost/*
+*.html
