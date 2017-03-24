@@ -26,13 +26,17 @@ class TenshiOstController(object):
         self.view.close()
 
     def bind_handlers(self):
-        self.view.buttons['reload'].bind("<Button-1>",  self.reload_titles)
-        self.view.buttons['add'].bind("<Button-1>",     self.add_titles)
-        self.view.buttons['del'].bind("<Button-1>",     self.del_titles)
-        self.view.buttons['load'].bind("<Button-1>",    self.load)
+        self.view.buttons['savepath'].bind("<Button-1>", self.savepath_change)
+        self.view.buttons['reload'].bind("<Button-1>",   self.reload_titles)
+        self.view.buttons['add'].bind("<Button-1>",      self.add_titles)
+        self.view.buttons['del'].bind("<Button-1>",      self.del_titles)
+        self.view.buttons['load'].bind("<Button-1>",     self.load)
 
         self.view.listboxes['available'].bind("<Double-1>", self.add_titles)
         self.view.listboxes['selected'].bind("<Double-1>", self.del_titles)
+
+    def savepath_change(self, event):
+        self.model.savepath_change()
 
     def reload_titles(self, event):
         self.model.reload()
@@ -45,4 +49,3 @@ class TenshiOstController(object):
 
     def load(self, event):
         self.model.load()
-

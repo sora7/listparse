@@ -1,6 +1,10 @@
 from time import gmtime, strftime
+from tkinter.filedialog import askdirectory
+import os
 
 from listparse.ost_grabber import OSTGrabber
+
+OST_DIR_DEFAULT = 'ost'
 
 
 class TenshiOstModel(object):
@@ -12,8 +16,15 @@ class TenshiOstModel(object):
         self.view = view_
 
         self.__grabber = OSTGrabber()
-        self.__grabber.save_path = 'ost'
+        self.__grabber.save_path = OST_DIR_DEFAULT
         self.__grabber.set_log(self.log)
+        self.__grabber.set_upd_callback(self.upd_progress)
+
+    def savepath_change(self):
+        ost_dir = askdirectory(parent=self.view.root, initialdir=os.getcwd(),
+                               title='Select a directory to save OSTs')
+        print(ost_dir)
+        self.__grabber.save_path = ost_dir
 
     def reload(self):
         print('reload')
@@ -70,3 +81,11 @@ class TenshiOstModel(object):
         text = '[%s] %s'%(strftime("%Y.%m.%d %H:%M:%S", gmtime()), message)
         self.view.log_add(text)
 
+    def upd_progress(self):
+        total = self.__grabber.files_count
+        curr = self.__grabber.curr_file
+
+        self.view.progress['maximum'] = total
+        self.view.progress['value'] = curr
+
+        self.view.textlabels['progress'].set(int(curr / total * 100))
