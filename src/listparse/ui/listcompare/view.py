@@ -85,7 +85,7 @@ class ListCompareView(PageView):
                                         )
             self.radiobuttons[title].pack(**radio_opt)
 
-        exp_label = tkinter.ttk.Label(statistic_frame, text='EXPAND')
+        exp_label = tkinter.ttk.Label(statistic_frame, text='')
         exp_label.pack(side='left', fill='both', expand=True)
 
         stat_label = tkinter.ttk.Label(statistic_frame,

@@ -42,9 +42,9 @@ class ACertainView:
 
         TABS = (
             ('list_compare',    'List Compare'),
-            ('auto_dir_make',   'AutoDirMake'),
-            ('res_copy',        'ResCopy'),
-            ('wh_scan',         'WH Scan'),
+            # ('auto_dir_make',   'AutoDirMake'),
+            # ('res_copy',        'ResCopy'),
+            # ('wh_scan',         'WH Scan'),
             ('tenshi_ost',      'Tenshi OST'),
             )
 
