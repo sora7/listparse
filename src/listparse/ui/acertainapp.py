@@ -9,13 +9,21 @@ import listparse.ui.tenshiost.view as to_v
 import listparse.ui.tenshiost.model as to_m
 import listparse.ui.tenshiost.controller as to_c
 
+import listparse.ui.indexator.view as in_v
+import listparse.ui.indexator.model as in_m
+import listparse.ui.indexator.controller as in_c
 
 class ACertainView:
     __root = None
 
     tabs = {}
+
+    # apps = {}
+
     list_compare = None
     tenshi_ost = None
+    indexator = None
+
 
     def __init__(self):
         self.create_ui()
@@ -24,6 +32,9 @@ class ACertainView:
                                                  self.tabs['list_compare'])
         self.tenshi_ost = to_v.TenshiOstView(root=self.__root,
                                            main_frame=self.tabs['tenshi_ost'])
+
+        self.indexator = in_v.IndexatorView(root=self.__root,
+                                        main_frame=self.tabs['indexator'])
 
     @property
     def root(self):
@@ -46,6 +57,7 @@ class ACertainView:
             # ('res_copy',        'ResCopy'),
             # ('wh_scan',         'WH Scan'),
             ('tenshi_ost',      'Tenshi OST'),
+            ('indexator',       'Indexator'),
             )
 
         for name, title in TABS:
@@ -65,12 +77,14 @@ class ACertainModel:
 
     list_compare = None
     tenshi_ost = None
+    indexator = None
     ##
 
     def __init__(self, view):
         self.view = view
         self.list_compare = lc_m.ListCompareModel(view.list_compare)
         self.tenshi_ost = to_m.TenshiOstModel(view.tenshi_ost)
+        self.indexator = in_m.IndexatorModel(view.indexator)
 
 
 class ACertainController:
@@ -79,6 +93,7 @@ class ACertainController:
 
     list_compare = None
     tenshi_ost = None
+    indexator = None
 
     def __init__(self):
         self.view = ACertainView()
@@ -89,6 +104,9 @@ class ACertainController:
 
         self.tenshi_ost = to_c.TenshiOstController(self.view.tenshi_ost,
                                                    self.model.tenshi_ost)
+
+        self.indexator = in_c.IndexatorController(self.view.indexator,
+                                              self.model.indexator)
 
         self.view.root.protocol('WM_DELETE_WINDOW', self.close_handler)
         self.view.root.mainloop()

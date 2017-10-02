@@ -92,14 +92,14 @@ def mk_listbox(frame, side='top', sbars='y', sel_mode=tkinter.EXTENDED):
 
 
 def mk_treeview(frame, side='top', sbars='y'):
-    BORDER = 5
+    BORDER = 0
     COLOR = 'grey'
 
     treeview_frame = tkinter.Frame(frame, bg=COLOR, bd=BORDER)
     treeview_frame.pack(side=side, fill='both', expand=True)
 
     treeview = tkinter.ttk.Treeview(treeview_frame)
-    mk_scrollable_area(frame, treeview, treeview_frame, sbars)
+    mk_scrollable_area(treeview, treeview_frame, sbars)
 
     return treeview
 
